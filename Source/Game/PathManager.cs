@@ -12,7 +12,14 @@ namespace Game
         /// <inheritdoc/>
         public override void OnStart()
         {
-            
+            /*
+            Graph testGraph = new Graph();
+            testGraph.populateGraph(Vector3.Zero, 10);
+            Vector3 start = new Vector3(3, 0, 0);
+            Vector3 end = new Vector3(-2, 0, -1);
+            Path p = testGraph.findPath(start, end);
+            Debug.Log(p.ToString());
+            */
         }
         
         /// <inheritdoc/>
@@ -62,7 +69,7 @@ public class Edge
     public Vector3 getTo() { return to; }
     public float getDistance() { return distance; }
 
-    public String toString(){
+    public override String ToString(){
         return "Edge from " + from.ToString() + " to " + to.ToString();
     }
 
@@ -136,6 +143,7 @@ public class Edge
 
             //Dijkstras Algorithm
             while(Q.Count != 0){
+
                 //find Node with smallest Distance
                 Vector3 nextNode = Vector3.Maximum;
                 float smallest = float.MaxValue;
@@ -189,11 +197,10 @@ public class Edge
 
         public void populateGraph(Vector3 middle, int radius){
             Vector3 rowreference = middle;
-            rowreference.X -= radius;
             rowreference.Z -= radius;
 
-            for(int h = -radius; h < radius; h++){
-                for(int i = -radius; i < radius; i++){
+            for(int h = -radius; h <= radius; h++){
+                for(int i = -radius; i <= radius; i++){
                     addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + (i+1)* Vector3.UnitX);
                 }
 
@@ -208,6 +215,8 @@ public class Edge
                 for(int i = -radius; i < radius; i++){
                     addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + i*Vector3.UnitX - Vector3.UnitZ);
                 }
+
+                rowreference += Vector3.UnitZ;
             }
         }
         
@@ -255,8 +264,8 @@ public class Edge
 
         public bool getPathExists(){ return pathExists; }
 
-        public String toString(){
-            String res = "";
+        public override String ToString(){
+            String res = "Exists: " + pathExists + " ";
 
             foreach(Vector3 n in calculatedPath){
                 res += n.ToString() + " --> ";
