@@ -7,8 +7,14 @@ namespace Game
     /// <summary>
     /// ControllerBoing Script.
     /// </summary>
+    
     public class ControllerBoing : Script
     {
+        [Tooltip("Dampening when no input")]
+        public float SlowBreak { get; set; } = 20.0f;
+
+        [Tooltip("Dampening when no input")]
+        public float SpeedBreak { get; set; } = 20.0f;
         /// <inheritdoc/>
         RigidBody rb;
         public override void OnStart()
@@ -26,8 +32,14 @@ namespace Game
         /// <inheritdoc/>
         public override void OnUpdate()
         {
-            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*500, Input.GetAxis("Vertical")*500, 0);
-            rb.LinearVelocity = wantedDir;
+            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*5000,0, Input.GetAxis("Vertical")*5000);
+            if(!wantedDir.IsZero){
+                rb.LinearDamping = SpeedBreak;
+                rb.AddForce(wantedDir);
+            }
+            else{
+                rb.LinearDamping = SlowBreak;
+            }
         }
     }
 }

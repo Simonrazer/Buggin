@@ -1,7 +1,7 @@
 {
 	"ID": "4eaf325e4cd72aa4cdeb6393cad05466",
 	"TypeName": "FlaxEditor.Content.Settings.GraphicsSettings",
-	"EngineBuild": 6333,
+	"EngineBuild": 6334,
 	"Data": {
 	"UseVSync": true,
 	"AAQuality": 1,
@@ -252,7 +252,7 @@
 		},
 		"MotionBlur": {
 			"OverrideFlags": 0,
-			"Enabled": true,
+			"Enabled": false,
 			"Scale": 1.0,
 			"SampleCount": 10,
 			"MotionVectorsResolution": 2
