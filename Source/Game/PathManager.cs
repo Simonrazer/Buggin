@@ -12,7 +12,7 @@ namespace Game
         /// <inheritdoc/>
         public override void OnStart()
         {
-            // Here you can add code that needs to be called when script is created, just before the first game update
+            
         }
         
         /// <inheritdoc/>
@@ -34,7 +34,7 @@ namespace Game
         }
     }
 
-    public class Edge
+public class Edge
 {
     private Vector3 from;
     private Vector3 to;
@@ -62,6 +62,10 @@ namespace Game
     public Vector3 getTo() { return to; }
     public float getDistance() { return distance; }
 
+    public String toString(){
+        return "Edge from " + from.ToString() + " to " + to.ToString();
+    }
+
 }
 
     public class Graph
@@ -69,6 +73,11 @@ namespace Game
         private List<Vector3> Nodes;
 
         private Dictionary<Vector3, List<Edge>> Edges;
+
+        public Graph(){
+            Nodes = new List<Vector3>();
+            Edges = new Dictionary<Vector3, List<Edge>>();
+        }
 
         public void addNode(Vector3 n)
         {
@@ -84,26 +93,39 @@ namespace Game
             L.Add(newEdge);
             Edges[from] = L;
         }
-
+        public void addEdgeDouble(Vector3 point1, Vector3 point2, float dist){
+            addEdge(point1, point2, dist);
+            addEdge(point2, point1, dist);
+        }
         public void addEdgeEucledian(Vector3 from, Vector3 to)
         {
             addEdge(from, to, (from - to).Length);
         }
-
+        public void addEdgeDoubleEucledian(Vector3 point1, Vector3 point2){
+            addEdgeEucledian(point1, point2);
+            addEdgeEucledian(point2, point1);
+        }
         public void addEdgeUnsure(Vector3 from, Vector3 to, float dist)
         {
             addNode(from);
             addNode(to);
             addEdge(from, to, dist);
         }
-
+        public void addEdgeDoubleUnsure(Vector3 point1, Vector3 point2, float dist){
+            addEdgeUnsure(point1, point2, dist);
+            addEdge(point2, point1, dist);
+        }
         public void addEdgeEucledianUnsure(Vector3 from, Vector3 to)
         {
             addEdgeUnsure(from, to, (from - to).Length);
         }
+        public void addEdgeDoubleEucledianUnsure(Vector3 point1, Vector3 point2){
+            addEdgeEucledianUnsure(point1, point2);
+            addEdgeEucledian(point2, point1);
+        }
 
         //Here be Dijkstra
-        public Path FindPath(Vector3 from, Vector3 to)
+        public Path findPath(Vector3 from, Vector3 to)
         {
             //initialize
             HashSet<Vector3> Q = new HashSet<Vector3>();
@@ -153,6 +175,7 @@ namespace Game
                 return result;
             }
 
+            //otherwise create shortest path
             LinkedList<Vector3> shortest = new LinkedList<Vector3>();
             Vector3 nextPre = to;
             while(!nextPre.Equals(Vector3.Maximum)){
@@ -162,6 +185,35 @@ namespace Game
 
             result = new Path(shortest, true);
             return result;
+        }
+
+        public void populateGraph(Vector3 middle, int radius){
+            Vector3 rowreference = middle;
+            rowreference.X -= radius;
+            rowreference.Z -= radius;
+
+            for(int h = -radius; h < radius; h++){
+                for(int i = -radius; i < radius; i++){
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + (i+1)* Vector3.UnitX);
+                }
+
+                for(int i = -radius; i < radius; i++){
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + (i+1)*Vector3.UnitX - Vector3.UnitZ);
+                }
+
+                for(int i = -radius; i < radius; i++){
+                    addEdgeDoubleEucledianUnsure(rowreference + (i+1)*Vector3.UnitX, rowreference + (i)* Vector3.UnitX - Vector3.UnitZ);
+                }
+
+                for(int i = -radius; i < radius; i++){
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + i*Vector3.UnitX - Vector3.UnitZ);
+                }
+            }
+        }
+        
+        public void clear(){
+            Nodes.Clear();
+            Edges.Clear();
         }
     }
 
@@ -202,6 +254,17 @@ namespace Game
         public bool isFinished() { return(0 == calculatedPath.Count); }
 
         public bool getPathExists(){ return pathExists; }
+
+        public String toString(){
+            String res = "";
+
+            foreach(Vector3 n in calculatedPath){
+                res += n.ToString() + " --> ";
+            }
+
+            res += "END";
+            return res;
+        }
     }
 
 }
