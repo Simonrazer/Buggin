@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FlaxEngine;
 
@@ -12,9 +12,11 @@ namespace Game
     {
         [Tooltip("Dampening when no input")]
         public float SlowBreak { get; set; } = 20.0f;
-
+        
         [Tooltip("Dampening when no input")]
         public float SpeedBreak { get; set; } = 20.0f;
+
+        public float SpeedMultiplier = 5000;
         /// <inheritdoc/>
         RigidBody rb;
         public override void OnStart()
@@ -32,7 +34,7 @@ namespace Game
         /// <inheritdoc/>
         public override void OnUpdate()
         {
-            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*5000,0, Input.GetAxis("Vertical")*5000);
+            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*SpeedMultiplier, 0 , Input.GetAxis("Vertical")*SpeedMultiplier);
             if(!wantedDir.IsZero){
                 rb.LinearDamping = SpeedBreak;
                 rb.AddForce(wantedDir);
