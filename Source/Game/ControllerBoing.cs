@@ -11,12 +11,16 @@ namespace Game
     public class ControllerBoing : Script
     {
         [Tooltip("Dampening when no input")]
-        public float SlowBreak { get; set; } = 20.0f;
+        public float SlowBreak { get; set; } = 15.0f;
         
         [Tooltip("Dampening when no input")]
-        public float SpeedBreak { get; set; } = 20.0f;
+        public float SpeedBreak { get; set; } = 10.0f;
 
-        public float SpeedMultiplier = 5000;
+        [Tooltip("Dash cooldown Time")]
+        public float DashTime { get; set; } = 1.0f;
+        [Tooltip("Dash Multiplier")]
+        public float DashMultiplier { get; set; } = 40.0f;
+
         /// <inheritdoc/>
         RigidBody rb;
         public override void OnStart()
@@ -32,9 +36,15 @@ namespace Game
         }
 
         /// <inheritdoc/>
+        float lastDashTime = 0;
         public override void OnUpdate()
         {
-            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*SpeedMultiplier, 0 , Input.GetAxis("Vertical")*SpeedMultiplier);
+            float multp = 1.0f;
+            if (Input.GetAction("Dash") && Time.GameTime - lastDashTime > DashTime){
+                lastDashTime = Time.GameTime;
+                multp = DashMultiplier;
+            }
+            Vector3 wantedDir = new Vector3(Input.GetAxis("Horizontal")*5000*multp, 0 , Input.GetAxis("Vertical")*5000*multp);
             if(!wantedDir.IsZero){
                 rb.LinearDamping = SpeedBreak;
                 rb.AddForce(wantedDir);
