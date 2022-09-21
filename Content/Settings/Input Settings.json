@@ -53,9 +53,17 @@
 			"Gamepad": -1
 		},
 		{
-			"Name": "Dash",
+			"Name": "Slash",
 			"Mode": 1,
 			"Key": 32,
+			"MouseButton": 0,
+			"GamepadButton": 13,
+			"Gamepad": -1
+		},
+		{
+			"Name": "Dash",
+			"Mode": 1,
+			"Key": 16,
 			"MouseButton": 0,
 			"GamepadButton": 13,
 			"Gamepad": -1

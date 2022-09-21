@@ -24,11 +24,15 @@ namespace Game
             Debug.Log(p.ToString());
             Debug.Log((DateTime.Now - StartingTime).ToString());
             */
+            
+            /* 
 
             //testing edge removal
             Graph testGraph = new Graph();
             testGraph.addEdgeDoubleEucledianUnsure(Vector3.Zero, Vector3.UnitX);
             testGraph.removeEdge(new Edge(Vector3.Zero, Vector3.UnitX, 1));
+            
+            */
         }
         
         /// <inheritdoc/>

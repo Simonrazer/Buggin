@@ -136,7 +136,7 @@
 			"Transform": {
 				"Translation": {
 					"X": 0.0,
-					"Y": 82.60133361816406,
+					"Y": 186.97462463378907,
 					"Z": 0.0
 				}
 			},
@@ -174,6 +174,41 @@
 					}
 				]
 			}
+		},
+		{
+			"ID": "780008654fdb7607bb28daa33d26a481",
+			"TypeName": "FlaxEngine.StaticModel",
+			"ParentID": "6a309c154cf53e45fe903380ff1a6e72",
+			"Name": "SlashVisuals",
+			"Transform": {
+				"Translation": {
+					"X": 0.0,
+					"Y": -82.60133361816406,
+					"Z": 0.0
+				},
+				"Scale": {
+					"X": 1.0,
+					"Y": 0.08000004291534424,
+					"Z": 1.0
+				}
+			},
+			"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
+			"Buffer": {
+				"Entries": [
+					{
+						"Material": "00000000000000000000000000000000",
+						"ShadowsMode": 3,
+						"Visible": true,
+						"ReceiveDecals": true
+					}
+				]
+			}
+		},
+		{
+			"ID": "510a28a74f208b68fd9eebb29c829742",
+			"TypeName": "FlaxEngine.BoxCollider",
+			"ParentID": "780008654fdb7607bb28daa33d26a481",
+			"Name": "SlashCollider"
 		},
 		{
 			"ID": "8764de764b5aed347295048fafae4225",
@@ -215,30 +250,6 @@
 			"ParentID": "b0d72c3746caebca055e1f921ca21c7c",
 			"V": {},
 			"Enabled": false
-		},
-		{
-			"ID": "780008654fdb7607bb28daa33d26a481",
-			"TypeName": "FlaxEngine.StaticModel",
-			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"Name": "StaticModel",
-			"Transform": {
-				"Scale": {
-					"X": 1.0,
-					"Y": 0.08000004291534424,
-					"Z": 1.0
-				}
-			},
-			"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
-			"Buffer": {
-				"Entries": [
-					{
-						"Material": "00000000000000000000000000000000",
-						"ShadowsMode": 3,
-						"Visible": true,
-						"ReceiveDecals": true
-					}
-				]
-			}
 		},
 		{
 			"ID": "acea7d1c40ce9f9c392049bd4e183a0a",
