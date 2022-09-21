@@ -217,18 +217,6 @@
 			"Enabled": false
 		},
 		{
-<<<<<<< Updated upstream
-			"ID": "2c8cba1f4fbc1b9b39e2b3a176ea8197",
-			"TypeName": "FlaxEngine.EmptyActor",
-			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"Name": "PathManagerTest"
-		},
-		{
-			"ID": "bf0f6deb4abbcd43592ce88b7e0084dd",
-			"TypeName": "Game.PathManager",
-			"ParentID": "2c8cba1f4fbc1b9b39e2b3a176ea8197",
-			"V": {}
-=======
 			"ID": "780008654fdb7607bb28daa33d26a481",
 			"TypeName": "FlaxEngine.StaticModel",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
@@ -251,7 +239,6 @@
 					}
 				]
 			}
->>>>>>> Stashed changes
 		}
 	]
 }
