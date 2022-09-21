@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime;
 using FlaxEngine;
 
 namespace Game
@@ -13,13 +14,21 @@ namespace Game
         public override void OnStart()
         {
             /*
+            //Testing Path finding funcionality
+            DateTime StartingTime = DateTime.Now;
             Graph testGraph = new Graph();
             testGraph.populateGraph(Vector3.Zero, 10);
-            Vector3 start = new Vector3(3, 0, 0);
-            Vector3 end = new Vector3(-2, 0, -1);
+            Vector3 start = new Vector3(300, 0, 500);
+            Vector3 end = new Vector3(-200, 0, -100);
             Path p = testGraph.findPath(start, end);
             Debug.Log(p.ToString());
+            Debug.Log((DateTime.Now - StartingTime).ToString());
             */
+
+            //testing edge removal
+            Graph testGraph = new Graph();
+            testGraph.addEdgeDoubleEucledianUnsure(Vector3.Zero, Vector3.UnitX);
+            testGraph.removeEdge(new Edge(Vector3.Zero, Vector3.UnitX, 1));
         }
         
         /// <inheritdoc/>
@@ -73,6 +82,19 @@ public class Edge
         return "Edge from " + from.ToString() + " to " + to.ToString();
     }
 
+    public override bool Equals(object obj)
+    {    
+        if (obj == null || GetType() != obj.GetType()) return false;
+        
+        Edge other = (Edge)obj;
+        return (getFrom().Equals(other.getFrom()) && getTo().Equals(other.getTo()) && (getDistance() == other.getDistance()));
+    }
+    
+    public override int GetHashCode()
+    {
+        return from.GetHashCode() + to.GetHashCode() - Mathd.RoundToInt(distance);
+    }
+
 }
 
     public class Graph
@@ -103,12 +125,9 @@ public class Edge
             Edges.Remove(n);
         }
 
-        public void addEdge(Vector3 from, Vector3 to, float dist)
-        {
-            List<Edge> L = Edges[from];
+        public void addEdge(Vector3 from, Vector3 to, float dist){
             Edge newEdge = new Edge(from, to, dist);
-            L.Add(newEdge);
-            Edges[from] = L;
+            Edges[from].Add(newEdge);
         }
         public void addEdgeDouble(Vector3 point1, Vector3 point2, float dist){
             addEdge(point1, point2, dist);
@@ -142,13 +161,13 @@ public class Edge
         }
 
         public void removeEdge(Edge e){
-            Edges[e.getFrom()].Remove(e); //TODO try if this works? if yes then AddEdge can be easier
+            Edges[e.getFrom()].Remove(e); 
         }
 
         //Here be Dijkstra
-        public Path findPath(Vector3 from, Vector3 to)
-        {
+        public Path findPath(Vector3 from, Vector3 to){
             //initialize
+            double MaxDistance = (to-from).Length + 300; //optimization
             HashSet<Vector3> Q = new HashSet<Vector3>();
             Q.Add(from);
             Dictionary<Vector3, float> distance = new Dictionary<Vector3, float>();
@@ -182,7 +201,7 @@ public class Edge
                     if(altDist < distance[nextTo]){
                         distance[nextTo] = altDist;
                         predecessor[nextTo] = nextFrom;
-                        if(!Q.Contains(nextTo)) Q.Add(nextTo);
+                        if((nextTo-to).Length < MaxDistance && !Q.Contains(nextTo)) Q.Add(nextTo); //first is optimization
                     }
                 }
                 Q.Remove(nextNode);
@@ -211,26 +230,28 @@ public class Edge
 
         public void populateGraph(Vector3 middle, int radius){
             Vector3 rowreference = middle;
-            rowreference.Z -= radius;
+            Vector3 Xinc = Vector3.UnitX * 100;
+            Vector3 Zinc = Vector3.UnitZ * 100;
+            rowreference.Z -= radius*100;
 
             for(int h = -radius; h <= radius; h++){
                 for(int i = -radius; i <= radius; i++){
-                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + (i+1)* Vector3.UnitX);
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Xinc, rowreference + (i+1)* Xinc);
                 }
 
                 for(int i = -radius; i < radius; i++){
-                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + (i+1)*Vector3.UnitX - Vector3.UnitZ);
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Xinc, rowreference + (i+1)*Xinc - Zinc);
                 }
 
                 for(int i = -radius; i < radius; i++){
-                    addEdgeDoubleEucledianUnsure(rowreference + (i+1)*Vector3.UnitX, rowreference + (i)* Vector3.UnitX - Vector3.UnitZ);
+                    addEdgeDoubleEucledianUnsure(rowreference + (i+1)*Xinc, rowreference + i* Xinc - Zinc);
                 }
 
                 for(int i = -radius; i < radius; i++){
-                    addEdgeDoubleEucledianUnsure(rowreference + i*Vector3.UnitX, rowreference + i*Vector3.UnitX - Vector3.UnitZ);
+                    addEdgeDoubleEucledianUnsure(rowreference + i*Xinc, rowreference + i*Xinc - Zinc);
                 }
 
-                rowreference += Vector3.UnitZ;
+                rowreference += Zinc;
             }
         }
         
@@ -245,30 +266,25 @@ public class Edge
         private LinkedList<Vector3> calculatedPath;
         private bool pathExists;
 
-        public Path(LinkedList<Vector3> nCP, bool exists)
-        {
+        public Path(LinkedList<Vector3> nCP, bool exists){
             calculatedPath = nCP;
             pathExists = exists;
         }
         
-        public Path()
-        {
+        public Path(){
             calculatedPath = new LinkedList<Vector3>();
             pathExists = false;
         }
 
-        public Vector3 getNextNode()
-        {
+        public Vector3 getNextNode(){
             return calculatedPath.First.Value;
         }
 
-        public void addNode(Vector3 newNode)
-        {
+        public void addNode(Vector3 newNode){
             calculatedPath.AddLast(newNode);
         }
 
-        public int nodeReached()
-        {
+        public int nodeReached(){
             calculatedPath.RemoveFirst();
             if (calculatedPath.Count == 0) return -1;
             else return 0;

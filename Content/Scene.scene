@@ -282,6 +282,18 @@
 			"TypeName": "FlaxEngine.SphereCollider",
 			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
 			"Name": "SphereCollider"
+		},
+		{
+			"ID": "0a4771084ce23c4973df4ea610bdfdec",
+			"TypeName": "FlaxEngine.EmptyActor",
+			"ParentID": "74a68a984824b4510d12589f199ad68f",
+			"Name": "PathManager"
+		},
+		{
+			"ID": "abd8fb344d65de78ecc41793e720485e",
+			"TypeName": "Game.PathManager",
+			"ParentID": "0a4771084ce23c4973df4ea610bdfdec",
+			"V": {}
 		}
 	]
 }
