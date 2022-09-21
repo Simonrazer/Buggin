@@ -93,6 +93,16 @@ public class Edge
             Edges.Add(n, new List<Edge>());
         }
 
+        public void removeNode(Vector3 n){
+            if(!Nodes.Contains(n)) return;
+            Nodes.Remove(n);
+            foreach(Edge e in Edges[n]){
+                Edge reverseE = new Edge(e.getTo(), e.getFrom(), e.getDistance());
+                Edges[e.getTo()].Remove(reverseE);
+            }
+            Edges.Remove(n);
+        }
+
         public void addEdge(Vector3 from, Vector3 to, float dist)
         {
             List<Edge> L = Edges[from];
@@ -129,6 +139,10 @@ public class Edge
         public void addEdgeDoubleEucledianUnsure(Vector3 point1, Vector3 point2){
             addEdgeEucledianUnsure(point1, point2);
             addEdgeEucledian(point2, point1);
+        }
+
+        public void removeEdge(Edge e){
+            Edges[e.getFrom()].Remove(e); //TODO try if this works? if yes then AddEdge can be easier
         }
 
         //Here be Dijkstra
