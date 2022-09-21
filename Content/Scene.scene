@@ -239,6 +239,49 @@
 					}
 				]
 			}
+		},
+		{
+			"ID": "acea7d1c40ce9f9c392049bd4e183a0a",
+			"TypeName": "FlaxEngine.RigidBody",
+			"ParentID": "74a68a984824b4510d12589f199ad68f",
+			"Name": "EnemyPhysics",
+			"Transform": {
+				"Translation": {
+					"X": 0.0,
+					"Y": 104.0983657836914,
+					"Z": -394.6941223144531
+				}
+			},
+			"Mass": 523.5988159179688
+		},
+		{
+			"ID": "e2c2b8124a20ab531c7959b882a06e61",
+			"TypeName": "Game.BasicAI",
+			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
+			"V": {}
+		},
+		{
+			"ID": "6ba1fd1b41ce6387cb44d2a9cba76a8e",
+			"TypeName": "FlaxEngine.StaticModel",
+			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
+			"Name": "Sphere",
+			"Model": "dd86c4724bf734c4959d23b3c74faa05",
+			"Buffer": {
+				"Entries": [
+					{
+						"Material": "c3fcec9549c6ae010f4b93a98c06146e",
+						"ShadowsMode": 3,
+						"Visible": true,
+						"ReceiveDecals": true
+					}
+				]
+			}
+		},
+		{
+			"ID": "41ddbb02468c7be015ca6baf568784fa",
+			"TypeName": "FlaxEngine.SphereCollider",
+			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
+			"Name": "SphereCollider"
 		}
 	]
 }
