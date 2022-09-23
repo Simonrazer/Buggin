@@ -304,6 +304,13 @@
 			"ID": "abd8fb344d65de78ecc41793e720485e",
 			"TypeName": "Game.PathManager",
 			"ParentID": "0a4771084ce23c4973df4ea610bdfdec",
+			"V": {},
+			"Enabled": false
+		},
+		{
+			"ID": "0666d156436ee401e21f5c82f2e728da",
+			"TypeName": "Game.PathMangeler",
+			"ParentID": "0a4771084ce23c4973df4ea610bdfdec",
 			"V": {}
 		}
 	]

@@ -4,6 +4,7 @@ Cache/
 Logs/
 Output/
 Screenshots/
+.vscode/*
 *.HotReload.*
 
 # Ignore Visual Studio project files (generated locally)
@@ -43,3 +44,4 @@ _ReSharper*/
 
 # Ignore Nuget packages folder
 packages/
+.vscode/c_cpp_properties.json
