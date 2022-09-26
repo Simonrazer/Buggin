@@ -1,17 +1,16 @@
 {
 	"ID": "bb6fbecf458db0ecffa5e2a5155b2b4f",
 	"TypeName": "FlaxEditor.Content.Settings.LayersAndTagsSettings",
-	"EngineBuild": 6333,
+	"EngineBuild": 6334,
 	"Data": {
 	"Tags": [
-		"Player",
-		"Bullet"
+		"Player"
 	],
 	"Layers": [
 		"Default",
 		"Player",
 		"Bullets",
-		null,
+		"ClickBoxLayer",
 		null,
 		null,
 		null,
