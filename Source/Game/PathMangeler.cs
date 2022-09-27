@@ -23,6 +23,9 @@ namespace Game
             //path = gameGraph.getPath(0,0,10,10);
             gameGraph.debugDraw();
             stopwatch.Stop();
+            gameGraph.removeNodeRealCoords(0,0);
+            gameGraph.removeNodeRealCoords(0,-100);
+            gameGraph.removeNodeRealCoords(0,100);
             //FlaxEngine.Debug.Log(stopwatch.ElapsedMilliseconds);
             
         }
@@ -48,16 +51,16 @@ namespace Game
             // Here you can add code that needs to be called every frame
             gameGraph.debugDraw();
             counter+=0.02;
-            path = gameGraph.getPath(5,0,-5,0);
+            path = gameGraph.getPathRealCoords(500,0,-500,0);
             //path = gameGraph.getPath(0,0,-1,5);
-            NodeGraph.drawPathRealCoords(path);
-            gameGraph.removeNodeRealCoords(0,0);
-            gameGraph.removeNodeRealCoords(0,-1);
+            gameGraph.drawPathIndices(path);
+            
             var pos = Input.MousePosition;
             var ray = Camera.MainCamera.ConvertMouseToRay(pos);
 
-            if (Physics.RayCast(ray.Position, ray.Direction, out var hit, layerMask: 1U << 3))
+            if (Input.GetAction("Fire") && Physics.RayCast(ray.Position, ray.Direction, out var hit, layerMask: 1U << 3))
             {
+                gameGraph.removeNodeRealCoords(hit.Point.X, hit.Point.Z);
                 FlaxEngine.Debug.Log(hit.Point);
             }
         }
@@ -77,7 +80,7 @@ namespace Game
             return Math.Sqrt(x*x+y*y);
         }
 
-        public String toString(){
+        override public String ToString(){
             return "("+x+"|"+y+")";
         }
 
@@ -100,7 +103,6 @@ namespace Game
 
     public class NodeGraph{
         Node[,] graph;
-
         public Node rawGetNode(Vector2I pos){
             return graph[pos.x, pos.y];
         }
@@ -116,7 +118,7 @@ namespace Game
 
         public void refreshEdgesIndices(int x, int y){
             Vector2I pos = new Vector2I(x,y);
-            //FlaxEngine.Debug.Log(pos.toString());
+            //FlaxEngine.Debug.Log(pos.ToString());
             Node changing = graph[x,y];
             if(changing == null) return;
             
@@ -134,9 +136,10 @@ namespace Game
             }
         }
 
-        public void removeNodeRealCoords(int x, int y){
+        public void removeNodeRealCoords(double x, double y){
             Vector2I indi = RealCordsToIndicies(x,y);
             graph[indi.x, indi.y] = null;
+            FlaxEngine.Debug.Log(indi);
             refreshNeighIndices(indi.x, indi.y);
         }
 
@@ -155,31 +158,36 @@ namespace Game
                         changing.edges[i] = hasNeighbour(pos,i);
                     }
                 }
-            }
-
-            
+            } 
         }
-
-        static public void drawPathRealCoords(List<Vector2I> path){
-            Vector2I start = path[0];
+        public void drawPathIndices(List<Vector2I> path){
+            Vector3 last = indexToRealCoords(path[0]);
+            foreach(Vector2I p in path){
+                Vector3 next = indexToRealCoords(p);
+                DebugDraw.DrawLine(last, next,Color.Red,0, false);
+                last = next;
+            }
+        }
+        public void drawPathRealCoords(List<Vector2> path){
+            Vector2 start = path[0];
             for(int i = 1; i < path.Count; i++){
-                DebugDraw.DrawLine(new Vector3(start.x*100,0.1, start.y*100), new Vector3(path[i].x*100,0.1, path[i].y*100), Color.Red,0, false);
+                DebugDraw.DrawLine(new Vector3(start.X, 0.1, start.Y*100), new Vector3(path[i].X,0.1, path[i].Y), Color.Red,0, false);
                 start = path[i];
             }
         }
         
-        public Vector2I RealCordsToIndicies(int x, int y){
-            return new Vector2I(x+graph.GetLength(0)/2, y+graph.GetLength(1)/2);
+        public Vector2I RealCordsToIndicies(double x, double y){
+            return new Vector2I((int)(x/100)+graph.GetLength(0)/2, (int)(y/100)+graph.GetLength(1)/2);
         }
-        public Node GetNodeRealCoords(int x, int y){
+        public Node GetNodeRealCoords(double x, double y){
             Vector2I indi = RealCordsToIndicies(x,y);
             return graph[indi.x, indi.y];
         }
-        public List<Vector2I> getPath(int sx, int sy, int dx, int dy){
-            Vector2I currentPos = new Vector2I(sx, sy);
-            Vector2I dest = new Vector2I(dx, dy);
+        public List<Vector2I> getPathRealCoords(double sx, double sy, double dx, double dy){
+            Vector2I currentPos = RealCordsToIndicies(sx, sy);
+            Vector2I dest = RealCordsToIndicies(dx, dy);
 
-            String path = currentPos.toString();
+            String path = currentPos.ToString();
             List<Vector2I> result = new List<Vector2I>();
             result.Add(currentPos);
             while(!Vector2I.EqualVals(currentPos, dest)){
@@ -188,26 +196,28 @@ namespace Game
                 
                 double slicedDirRaw = (((angle+Math.PI)/(Math.PI*1.9999))*7);
                 int slicedDir = (int) slicedDirRaw;
-                //FlaxEngine.Debug.Log(angle+"  "+slicedDir + " " + currentPos.toString());
-                Node standingHere = this.GetNodeRealCoords(currentPos.x, currentPos.y);
+                //FlaxEngine.Debug.Log(angle+"  "+slicedDir + " " + currentPos.ToString());
+                Node standingHere = rawGetNode(currentPos);
                 int spinCounter = 0;
                 if(standingHere != null) {
                         while(!standingHere.edges[slicedDir]){
                         //Wenn das nächst beste auch nicht geht dreh dich einfach bis was geht
                         double dirDiff = spinCounter == 0 ? slicedDirRaw - slicedDir : spinCounter;
-                        slicedDir+= dirDiff > 0 ? 1 : -1;
+                        slicedDir += dirDiff > 0 ? 1 : -1;
                         if(slicedDir == -1) slicedDir = 7;
                         else if(slicedDir == 8) slicedDir = 0;
-                        spinCounter--;
-                        //FlaxEngine.Debug.Log(spinCounter);
+                        spinCounter++;
                     }
                 }
                 currentPos = Vector2I.Add(currentPos, Node.dirLookup(slicedDir));
                 result.Add(currentPos);
-                path+="->"+currentPos.toString();
+                path+="->"+currentPos.ToString();
             }
             //FlaxEngine.Debug.Log(path);
             return result;
+        }
+        public Vector3 indexToRealCoords(Vector2I i){
+            return indexToRealCoords(i.x, i.y);
         }
         public Vector3 indexToRealCoords(int x, int y){
             return new Vector3(100*(x-graph.GetLength(0)/2),0,100*(y-graph.GetLength(0)/2));

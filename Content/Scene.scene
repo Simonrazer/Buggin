@@ -134,13 +134,6 @@
 			"TypeName": "FlaxEngine.RigidBody",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
 			"Name": "PlayerPhysics",
-			"Transform": {
-				"Translation": {
-					"X": 0.0,
-					"Y": 186.97462463378907,
-					"Z": 0.0
-				}
-			},
 			"OverrideMass": true,
 			"LinearDamping": 5.0,
 			"AngularDamping": 0.0,
@@ -326,7 +319,8 @@
 					"Z": 20.0
 				}
 			},
-			"Layer": 3
+			"Layer": 3,
+			"IsTrigger": true
 		}
 	]
 }
