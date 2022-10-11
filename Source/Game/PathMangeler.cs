@@ -14,18 +14,24 @@ namespace Game
         /// <inheritdoc/>
         NodeGraph gameGraph;
         List<Vector2I> path;
+
+        public Prefab clicc;
         public override void OnStart()
         {
             // Here you can add code that needs to be called when script is created, just before the first game update
-            stopwatch.Reset();
-            stopwatch.Start();
-            gameGraph = new NodeGraph(21, 21);
+
+            gameGraph = new NodeGraph(210, 210);
             //path = gameGraph.getPath(0,0,10,10);
             gameGraph.debugDraw();
-            stopwatch.Stop();
             gameGraph.removeNodeRealCoords(0,0);
             gameGraph.removeNodeRealCoords(0,-100);
             gameGraph.removeNodeRealCoords(0,100);
+            gameGraph.removeNodeRealCoords(0,-200);
+            gameGraph.removeNodeRealCoords(0,200);
+            gameGraph.removeNodeRealCoords(0,-300);
+            gameGraph.removeNodeRealCoords(0,300);
+            gameGraph.removeNodeRealCoords(-100,-100);
+            gameGraph.removeNodeRealCoords(-100,100);
             //FlaxEngine.Debug.Log(stopwatch.ElapsedMilliseconds);
             
         }
@@ -44,15 +50,18 @@ namespace Game
         }
 
         /// <inheritdoc/>
-        Stopwatch stopwatch = new Stopwatch();
+        
         double counter = 0;
         public override void OnUpdate()
         {
             // Here you can add code that needs to be called every frame
-            gameGraph.debugDraw();
+            //gameGraph.debugDraw();
             counter+=0.02;
+            //path = gameGraph.walkRightArWall(100,0,7);
+            Profiler.BeginEvent("MyFunction");
             path = gameGraph.getPathRealCoords(500,0,-500,0);
-            //path = gameGraph.getPath(0,0,-1,5);
+            Profiler.EndEvent();
+            //FlaxEngine.Debug.Log(stopwatch.ElapsedMilliseconds);
             gameGraph.drawPathIndices(path);
             
             var pos = Input.MousePosition;
@@ -60,8 +69,8 @@ namespace Game
 
             if (Input.GetAction("Fire") && Physics.RayCast(ray.Position, ray.Direction, out var hit, layerMask: 1U << 3))
             {
+                PrefabManager.SpawnPrefab(clicc, hit.Point);
                 gameGraph.removeNodeRealCoords(hit.Point.X, hit.Point.Z);
-                FlaxEngine.Debug.Log(hit.Point);
             }
         }
     }
@@ -78,6 +87,9 @@ namespace Game
 
         public double Length(){
             return Math.Sqrt(x*x+y*y);
+        }
+        public bool equals(Vector2I r){
+            return r.x == x && r.y == y;
         }
 
         override public String ToString(){
@@ -99,10 +111,15 @@ namespace Game
         static public Vector2I Add(Vector2I l, Vector2I r){
             return new Vector2I(l.x+r.x, l.y+r.y);
         }
+
+        static public int dist2(Vector2I l, Vector2I r){
+            return (l.x - r.x)*(l.x - r.x)+(l.y - r.y)*(l.y - r.y);
+        }
     }
 
     public class NodeGraph{
         Node[,] graph;
+
         public Node rawGetNode(Vector2I pos){
             return graph[pos.x, pos.y];
         }
@@ -139,7 +156,6 @@ namespace Game
         public void removeNodeRealCoords(double x, double y){
             Vector2I indi = RealCordsToIndicies(x,y);
             graph[indi.x, indi.y] = null;
-            FlaxEngine.Debug.Log(indi);
             refreshNeighIndices(indi.x, indi.y);
         }
 
@@ -183,37 +199,164 @@ namespace Game
             Vector2I indi = RealCordsToIndicies(x,y);
             return graph[indi.x, indi.y];
         }
-        public List<Vector2I> getPathRealCoords(double sx, double sy, double dx, double dy){
-            Vector2I currentPos = RealCordsToIndicies(sx, sy);
-            Vector2I dest = RealCordsToIndicies(dx, dy);
-
-            String path = currentPos.ToString();
-            List<Vector2I> result = new List<Vector2I>();
-            result.Add(currentPos);
-            while(!Vector2I.EqualVals(currentPos, dest)){
-                Vector2I dir = Vector2I.Sub(dest,currentPos);
-                double angle = Math.Atan2(dir.y, dir.x);
+        public List<Vector2I> walkRightArWall(Vector2I start, int wallDir){
+            List<Vector2I> rightaroundPath = new List<Vector2I>();
+            Node wallWalkNode = rawGetNode(start);
+            Vector2I wallWalkPos = start;
+            int steps = 0;
+            int dirToGo = Node.rot90r(wallDir);
+            do {
                 
+                if(!wallWalkNode.edges[wallDir]){
+                    if(!wallWalkNode.edges[dirToGo]){
+                        wallDir = Node.rot45r(wallDir);
+                        dirToGo = Node.rot45r(dirToGo);
+                        //FlaxEngine.Debug.Log("Wall Good, Go not");
+                        continue;
+                    }
+                    //FlaxEngine.Debug.Log("All Good");
+                }
+                else{
+                    wallDir = Node.rot90l(wallDir);
+                    dirToGo = Node.rot90l(dirToGo);
+                    //FlaxEngine.Debug.Log("Wall Bad");
+                }
+                //FlaxEngine.Debug.Log("Moving");
+                wallWalkPos = Vector2I.Add(wallWalkPos, Node.dirLookup(dirToGo));
+                wallWalkNode = rawGetNode(wallWalkPos);
+                rightaroundPath.Add(wallWalkPos);
+                steps++;
+                
+            }
+            while((steps == 0 || !start.equals(wallWalkPos)) && steps < 100);
+            return rightaroundPath;
+        }
+         public List<Vector2I> walkLeftArWall(Vector2I start, int wallDir){
+            List<Vector2I> rightaroundPath = new List<Vector2I>();
+            Node wallWalkNode = rawGetNode(start);
+            Vector2I wallWalkPos = start;
+            int steps = 0;
+            int dirToGo = Node.rot90l(wallDir);
+            do {
+                
+                if(!wallWalkNode.edges[wallDir]){
+                    if(!wallWalkNode.edges[dirToGo]){
+                        wallDir = Node.rot45l(wallDir);
+                        dirToGo = Node.rot45l(dirToGo);
+                        //FlaxEngine.Debug.Log("Wall Good, Go not");
+                        continue;
+                    }
+                    //FlaxEngine.Debug.Log("All Good");
+                }
+                else{
+                    wallDir = Node.rot90r(wallDir);
+                    dirToGo = Node.rot90r(dirToGo);
+                    //FlaxEngine.Debug.Log("Wall Bad");
+                }
+                //FlaxEngine.Debug.Log("Moving");
+                wallWalkPos = Vector2I.Add(wallWalkPos, Node.dirLookup(dirToGo));
+                wallWalkNode = rawGetNode(wallWalkPos);
+                rightaroundPath.Add(wallWalkPos);
+                steps++;
+                
+            }
+            while((steps == 0 || !start.equals(wallWalkPos)) && steps < 100);
+            return rightaroundPath;
+        }
+
+        public List<Vector2I> walkRightArWall(int x, int y, int wallDir){
+            Vector2I start = RealCordsToIndicies(x,y);
+            return walkRightArWall(start, wallDir);
+        }
+
+        public List<Vector2I> unhinderendPath(Vector2I start, Vector2I dest){
+            List<Vector2I> path = new List<Vector2I>();
+            Vector2I currentPos = start;
+            Node standingHere = rawGetNode(start);
+            path.Add(start);
+            while(!path[path.Count-1].equals(dest)){    //2
+                //Determine optimal angle to walk
+                Vector2I dir = Vector2I.Sub(dest,currentPos);
+                double angle = Math.Atan2(dir.y, dir.x);             
                 double slicedDirRaw = (((angle+Math.PI)/(Math.PI*1.9999))*7);
                 int slicedDir = (int) slicedDirRaw;
-                //FlaxEngine.Debug.Log(angle+"  "+slicedDir + " " + currentPos.ToString());
-                Node standingHere = rawGetNode(currentPos);
-                int spinCounter = 0;
-                if(standingHere != null) {
-                        while(!standingHere.edges[slicedDir]){
-                        //Wenn das nächst beste auch nicht geht dreh dich einfach bis was geht
-                        double dirDiff = spinCounter == 0 ? slicedDirRaw - slicedDir : spinCounter;
-                        slicedDir += dirDiff > 0 ? 1 : -1;
-                        if(slicedDir == -1) slicedDir = 7;
-                        else if(slicedDir == 8) slicedDir = 0;
-                        spinCounter++;
+                
+                if(standingHere.edges[slicedDir] ){
+                    currentPos = Vector2I.Add(currentPos, Node.dirLookup(slicedDir));
+                    standingHere = rawGetNode(currentPos);
+                    path.Add(currentPos); //3
+                }
+                else{ 
+                    return null;
+                }
+            }
+            return path;
+        }
+        public List<Vector2I> getPathRealCoords(double sx, double sy, double dx, double dy){
+            Vector2I currentPos = RealCordsToIndicies(sx, sy);
+            Node standingHere = rawGetNode(currentPos);
+            Vector2I dest = RealCordsToIndicies(dx, dy);
+            List<Vector2I> result = new List<Vector2I>();
+            result.Add(currentPos);
+
+            List<Vector2I> dirtypath = new List<Vector2I>(); //1
+            dirtypath.Add(currentPos);
+            int maxx = 0;
+            while(!dirtypath[dirtypath.Count-1].equals(dest) && maxx < 1000){    //2
+                //Determine optimal angle to walk
+                Vector2I dir = Vector2I.Sub(dest,currentPos);
+                double angle = Math.Atan2(dir.y, dir.x);             
+                double slicedDirRaw = (((angle+Math.PI)/(Math.PI*1.9999))*7);
+                int slicedDir = (int) slicedDirRaw;
+                
+                if(standingHere.edges[slicedDir] ){
+                    currentPos = Vector2I.Add(currentPos, Node.dirLookup(slicedDir));
+                    standingHere = rawGetNode(currentPos);
+                    dirtypath.Add(currentPos); //3
+                }
+                else{   //4
+                    List<Vector2I> rightaroundPath = walkRightArWall(currentPos, slicedDir);
+                    List<Vector2I> leftaroundPath = walkLeftArWall(currentPos, slicedDir);    
+
+                    int leftDistToClosest = 99999;
+                    int leftIndi = 99999;
+                    int rightDistToClosest = 99999;
+                    int rightIndi = 99999;
+
+                    for(int i = 0; i < rightaroundPath.Count; i++){
+                        int d = Vector2I.dist2(rightaroundPath[i], dest);
+                        if(d < rightDistToClosest){
+                            rightDistToClosest = d;
+                            rightIndi = i;
+                        }               
+                    }
+
+                    for(int i = 0; i < leftaroundPath.Count; i++){
+                        int d = Vector2I.dist2(leftaroundPath[i], dest);
+                        if(d < leftDistToClosest){
+                            leftDistToClosest = d;
+                            leftIndi = i;
+                        }               
+                    }
+
+                    List<Vector2I> shortPatharoundWall = rightIndi < leftIndi ? rightaroundPath.GetRange(0,rightIndi) : leftaroundPath.GetRange(0,leftIndi);
+                    dirtypath.AddRange(shortPatharoundWall);       
+                    currentPos = dirtypath[dirtypath.Count-1];
+                    standingHere = rawGetNode(dirtypath[dirtypath.Count-1]);           
+                }
+                maxx++;
+            }
+            for(int i = 0; i < dirtypath.Count; i++){
+                result.Add(dirtypath[i]);
+                for(int j = dirtypath.Count-1; j > i; j--){
+                    var p = unhinderendPath(dirtypath[i], dirtypath[j]);
+                    if(p != null){
+                        result.AddRange(p);
+                        i = j;
+                        break;
                     }
                 }
-                currentPos = Vector2I.Add(currentPos, Node.dirLookup(slicedDir));
-                result.Add(currentPos);
-                path+="->"+currentPos.ToString();
             }
-            //FlaxEngine.Debug.Log(path);
             return result;
         }
         public Vector3 indexToRealCoords(Vector2I i){
@@ -266,6 +409,62 @@ namespace Game
                 case 0: return 4;
                 case 1: return 5;
                 case 2: return 6;
+                default: return -1;
+            }
+        }
+
+        static public int rot90r(int d){
+            switch(d){
+                case 3: return 1;
+                case 4: return 2;
+                case 5: return 3;
+                case 6: return 4;
+                case 7: return 5;
+                case 0: return 6;
+                case 1: return 7;
+                case 2: return 0;
+                default: return -1;
+            }
+        }
+
+        static public int rot90l(int d){
+            switch(d){
+                case 3: return 5;
+                case 4: return 6;
+                case 5: return 7;
+                case 6: return 0;
+                case 7: return 1;
+                case 0: return 2;
+                case 1: return 3;
+                case 2: return 4;
+                default: return -1;
+            }
+        }
+
+        static public int rot45l(int d){
+            switch(d){
+                case 3: return 4;
+                case 4: return 5;
+                case 5: return 6;
+                case 6: return 7;
+                case 7: return 0;
+                case 0: return 1;
+                case 1: return 2;
+                case 2: return 3;
+                default: return -1;
+            }
+        }
+
+        static public int rot45r(int d){
+            switch(d){
+                case 3: return 2;
+                case 4: return 3;
+                case 5: return 4;
+                case 6: return 5;
+                case 7: return 6;
+                case 0: return 7;
+                case 1: return 0;
+                case 2: return 1;
                 default: return -1;
             }
         }

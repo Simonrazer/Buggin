@@ -9,7 +9,7 @@
 	"Layers": [
 		"Default",
 		"Player",
-		"Bullets",
+		"PlayerActions",
 		"ClickBoxLayer",
 		null,
 		null,

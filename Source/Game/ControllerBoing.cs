@@ -23,7 +23,7 @@ namespace Game
         public float SlashDuration { get; set; } = 2.0f;
 
         [Tooltip("Slash cooldown Time")]
-        public float SlashTime { get; set; } = 1.0f;
+        public float SlashCooldown { get; set; } = 1.0f;
         [Tooltip("Dash Multiplier")]
         public float DashMultiplier { get; set; } = 40.0f;
 
@@ -45,7 +45,7 @@ namespace Game
 
         /// <inheritdoc/>
         float lastDashTime = 0;
-        float lastSlashTime = 0;
+        float lastSlashCooldown = 0;
         bool isSlashing = false;
          Vector3 slashDir = Vector3.Zero;
         public override void OnUpdate()
@@ -64,14 +64,14 @@ namespace Game
                 rb.LinearDamping = SlowBreak;
             }
 
-            if (Input.GetAction("Slash") && Time.GameTime - lastSlashTime > SlashTime){
-                lastSlashTime = Time.GameTime;
+            if (Input.GetAction("Slash") && Time.GameTime - lastSlashCooldown > SlashCooldown){
+                lastSlashCooldown = Time.GameTime;
                 isSlashing = true;
                 slashDir = wantedDir.Normalized * 200;
             }
             if(isSlashing){
-                slashActor.LocalPosition = Vector3.Lerp(Vector3.Zero,slashDir, (Time.GameTime - lastSlashTime)/SlashDuration);
-                if(Time.GameTime - lastSlashTime >= SlashDuration){
+                slashActor.LocalPosition = Vector3.Lerp(Vector3.Zero,slashDir, (Time.GameTime - lastSlashCooldown)/SlashDuration);
+                if(Time.GameTime - lastSlashCooldown >= SlashDuration){
                     isSlashing = false;
                     slashActor.LocalPosition = Vector3.Down * 82;
                 }

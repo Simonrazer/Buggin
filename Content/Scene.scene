@@ -24,91 +24,15 @@
 			"V": {}
 		},
 		{
-			"ID": "28553d634087c67c711ebd96080482aa",
-			"TypeName": "FlaxEngine.EmptyActor",
-			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"Name": "Visuals"
-		},
-		{
-			"ID": "bc81376747666609b0974580a21519a1",
-			"TypeName": "FlaxEngine.Sky",
-			"ParentID": "28553d634087c67c711ebd96080482aa",
-			"Name": "Sky",
-			"Transform": {
-				"Translation": {
-					"X": -69.65292358398438,
-					"Y": 124.01800537109375,
-					"Z": 35.34806823730469
-				}
-			},
-			"Sun": "deecf0894777293a4f478dadacf2a6f8",
-			"SunPower": 10.0
-		},
-		{
-			"ID": "da5e1c454a56377517d41686ebb0348f",
-			"TypeName": "FlaxEngine.EnvironmentProbe",
-			"ParentID": "28553d634087c67c711ebd96080482aa",
-			"Name": "Environment Probe",
-			"Transform": {
-				"Translation": {
-					"X": 0.0,
-					"Y": 249.3258056640625,
-					"Z": 0.0
-				}
-			},
-			"ProbeID": "1e1fb3a7447c1265b15967b480549d98"
-		},
-		{
-			"ID": "deecf0894777293a4f478dadacf2a6f8",
-			"TypeName": "FlaxEngine.DirectionalLight",
-			"ParentID": "28553d634087c67c711ebd96080482aa",
-			"Name": "Directional Light",
-			"Transform": {
-				"Translation": {
-					"X": -1.6893305778503419,
-					"Y": 267.7931823730469,
-					"Z": 0.0
-				},
-				"Orientation": {
-					"X": 0.5176515579223633,
-					"Y": 0.0833025798201561,
-					"Z": 0.06534233689308167,
-					"W": 0.8490158915519714
-				}
-			},
-			"Color": {
-				"R": 1.0,
-				"G": 0.9770245552062988,
-				"B": 0.8860000371932983,
-				"A": 1.0
-			}
-		},
-		{
-			"ID": "eb18e84d41670d6314174b89a1d5ffea",
-			"TypeName": "FlaxEngine.SkyLight",
-			"ParentID": "28553d634087c67c711ebd96080482aa",
-			"Name": "SkyLight",
-			"Transform": {
-				"Translation": {
-					"X": 0.0,
-					"Y": 150.0,
-					"Z": 0.0
-				}
-			},
-			"BakedProbe": "1c0e10484ff57d402275289550564b9f",
-			"Mode": 0
-		},
-		{
 			"ID": "4a9d87134ab42f4294db6bbcf1902bde",
 			"TypeName": "FlaxEngine.StaticModel",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"IsActive": false,
 			"Name": "Floor",
 			"Transform": {
 				"Scale": {
-					"X": 10.0,
+					"X": 100.0,
 					"Y": 0.5,
-					"Z": 10.0
+					"Z": 100.0
 				}
 			},
 			"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
@@ -134,6 +58,14 @@
 			"TypeName": "FlaxEngine.RigidBody",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
 			"Name": "PlayerPhysics",
+			"Transform": {
+				"Translation": {
+					"X": 0.0,
+					"Y": 125.4427490234375,
+					"Z": 0.0
+				}
+			},
+			"StaticFlags": 0,
 			"OverrideMass": true,
 			"LinearDamping": 5.0,
 			"AngularDamping": 0.0,
@@ -144,19 +76,24 @@
 			"ID": "4726e62d42259474cbfcb9bd4973a72d",
 			"TypeName": "Game.ControllerBoing",
 			"ParentID": "6a309c154cf53e45fe903380ff1a6e72",
-			"V": {}
+			"V": {
+	"SlashDuration": 0.1
+}
 		},
 		{
 			"ID": "e0405b5544fcfadee81debb4ae77692d",
 			"TypeName": "FlaxEngine.BoxCollider",
 			"ParentID": "6a309c154cf53e45fe903380ff1a6e72",
-			"Name": "BoxCollider"
+			"Name": "BoxCollider",
+			"StaticFlags": 0,
+			"Layer": 1
 		},
 		{
 			"ID": "e1c92bcc4eb069c29f0a5e9c605ec5ef",
 			"TypeName": "FlaxEngine.StaticModel",
 			"ParentID": "6a309c154cf53e45fe903380ff1a6e72",
 			"Name": "Cube",
+			"StaticFlags": 0,
 			"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
 			"Buffer": {
 				"Entries": [
@@ -186,6 +123,7 @@
 					"Z": 1.0
 				}
 			},
+			"StaticFlags": 0,
 			"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
 			"Buffer": {
 				"Entries": [
@@ -199,16 +137,51 @@
 			}
 		},
 		{
+			"ID": "bde0c4bf4636adc266c63ea839b74164",
+			"TypeName": "FlaxEngine.RigidBody",
+			"ParentID": "780008654fdb7607bb28daa33d26a481",
+			"Name": "RigidBody",
+			"StaticFlags": 0,
+			"Mass": 80.00004577636719,
+			"IsKinematic": true
+		},
+		{
 			"ID": "510a28a74f208b68fd9eebb29c829742",
 			"TypeName": "FlaxEngine.BoxCollider",
-			"ParentID": "780008654fdb7607bb28daa33d26a481",
-			"Name": "SlashCollider"
+			"ParentID": "bde0c4bf4636adc266c63ea839b74164",
+			"Name": "SlashCollider",
+			"StaticFlags": 0,
+			"Layer": 2
+		},
+		{
+			"ID": "c004c5bc43b49a6f1688efb86350b308",
+			"TypeName": "FlaxEngine.SpotLight",
+			"ParentID": "6a309c154cf53e45fe903380ff1a6e72",
+			"Name": "SpotLight",
+			"Transform": {
+				"Translation": {
+					"X": 0.0,
+					"Y": 274.7825012207031,
+					"Z": -108.37506103515625
+				},
+				"Orientation": {
+					"X": 0.5674617290496826,
+					"Y": 0.0,
+					"Z": 0.0,
+					"W": 0.8233997821807861
+				}
+			},
+			"Brightness": 16.139999389648439,
+			"VolumetricScatteringIntensity": 0.0,
+			"MinRoughness": 0.0,
+			"OuterAngle": 50.0
 		},
 		{
 			"ID": "8764de764b5aed347295048fafae4225",
 			"TypeName": "FlaxEngine.EmptyActor",
 			"ParentID": "74a68a984824b4510d12589f199ad68f",
-			"Name": "PlayerFollower"
+			"Name": "PlayerFollower",
+			"StaticFlags": 0
 		},
 		{
 			"ID": "154a94df4ca86076ef35c880f0a31612",
@@ -257,7 +230,9 @@
 					"Z": -394.6941223144531
 				}
 			},
-			"Mass": 523.5988159179688
+			"StaticFlags": 0,
+			"OverrideMass": true,
+			"Mass": 10.0
 		},
 		{
 			"ID": "e2c2b8124a20ab531c7959b882a06e61",
@@ -270,6 +245,7 @@
 			"TypeName": "FlaxEngine.StaticModel",
 			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
 			"Name": "Sphere",
+			"StaticFlags": 0,
 			"Model": "dd86c4724bf734c4959d23b3c74faa05",
 			"Buffer": {
 				"Entries": [
@@ -286,7 +262,8 @@
 			"ID": "41ddbb02468c7be015ca6baf568784fa",
 			"TypeName": "FlaxEngine.SphereCollider",
 			"ParentID": "acea7d1c40ce9f9c392049bd4e183a0a",
-			"Name": "SphereCollider"
+			"Name": "SphereCollider",
+			"StaticFlags": 0
 		},
 		{
 			"ID": "0a4771084ce23c4973df4ea610bdfdec",
@@ -305,7 +282,9 @@
 			"ID": "0666d156436ee401e21f5c82f2e728da",
 			"TypeName": "Game.PathMangeler",
 			"ParentID": "0a4771084ce23c4973df4ea610bdfdec",
-			"V": {}
+			"V": {
+	"clicc": "3731db0a4d0268b33a036fa4ea2524cd"
+}
 		},
 		{
 			"ID": "e0a86e334d9209c13e158c87befa826a",
@@ -321,6 +300,33 @@
 			},
 			"Layer": 3,
 			"IsTrigger": true
+		},
+		{
+			"ID": "e938b7ff45f301be3389868aab18ccf6",
+			"TypeName": "FlaxEngine.PostFxVolume",
+			"ParentID": "74a68a984824b4510d12589f199ad68f",
+			"Name": "PostFxVolume",
+			"Priority": 4,
+			"IsBounded": false,
+			"Settings": {
+				"AO": {},
+				"GI": {},
+				"Bloom": {
+					"OverrideFlags": 7,
+					"Intensity": 0.03999999910593033,
+					"Threshold": 10.690000534057618
+				},
+				"ToneMapping": {},
+				"ColorGrading": {},
+				"EyeAdaptation": {},
+				"CameraArtifacts": {},
+				"LensFlares": {},
+				"DepthOfField": {},
+				"MotionBlur": {},
+				"SSR": {},
+				"AA": {},
+				"PostFxMaterials": {}
+			}
 		}
 	]
 }

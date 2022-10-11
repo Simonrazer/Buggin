@@ -1,0 +1,21 @@
+path dirtypath
+while(not at player)
+    append dirToPlayer to path
+    if(cant)
+        walk 100 steps right around wall or until back in the same spot
+        walk 100 steps left  around wall or until back in the same spot or until at the last spot of the first wallwalk
+        record those paths
+        find the spot with the closest distance to player from those 2 paths
+        figure out which path gets you there quickest
+        append that path instead
+path cleanpath
+for pointA in dirtypath
+    append pointA to cleanpath
+    for pointB in reverse(dirtypath) 
+        if(can reach player without a wall in the way)
+            append that path to cleanpath
+            append pointB to cleanpath
+            pointA = pointB
+            break
+
+
