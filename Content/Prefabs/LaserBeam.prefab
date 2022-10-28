@@ -1,0 +1,74 @@
+{
+	"ID": "265e107547ce733321b880a1b478dc74",
+	"TypeName": "FlaxEngine.Prefab",
+	"EngineBuild": 6334,
+	"Data": [
+	{
+		"ID": "225a439547947a62d2505d817ce9ab92",
+		"TypeName": "FlaxEngine.EmptyActor",
+		"Name": "Root"
+	},
+	{
+		"ID": "14fa467a45e6516536f147a9e0bc1055",
+		"TypeName": "Game.LaserBeam",
+		"ParentID": "225a439547947a62d2505d817ce9ab92",
+		"V": {
+	"noHurt": "9d7a171040bd0cab60cedd9c28de458e",
+	"bigHurt": "9702773842509c4e938a498e89299503"
+}
+	},
+	{
+		"ID": "05239f0e43875f09a15f689bb8045222",
+		"TypeName": "FlaxEngine.EmptyActor",
+		"ParentID": "225a439547947a62d2505d817ce9ab92",
+		"Name": "scaling",
+		"Transform": {
+			"Translation": {
+				"X": 0.0,
+				"Y": 0.0,
+				"Z": 500.0
+			},
+			"Scale": {
+				"X": 0.5,
+				"Y": 0.10000000149011612,
+				"Z": 10.0
+			}
+		}
+	},
+	{
+		"ID": "9702773842509c4e938a498e89299503",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "05239f0e43875f09a15f689bb8045222",
+		"IsActive": false,
+		"Name": "bigHurt",
+		"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "cec791554bc4d6455a228caab334ae0c",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	},
+	{
+		"ID": "9d7a171040bd0cab60cedd9c28de458e",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "05239f0e43875f09a15f689bb8045222",
+		"Name": "noHurt",
+		"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "5b12f24e43098feae031ff883b340af3",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	}
+]
+}

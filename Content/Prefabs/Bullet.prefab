@@ -1,0 +1,55 @@
+{
+	"ID": "dbaa814a41fafc041f46ada6ccb4dc3c",
+	"TypeName": "FlaxEngine.Prefab",
+	"EngineBuild": 6334,
+	"Data": [
+	{
+		"ID": "5bb159234e726e0336fd4d980e4cedfc",
+		"TypeName": "FlaxEngine.EmptyActor",
+		"Name": "Bullet",
+		"Transform": {
+			"Scale": {
+				"X": 0.10000000149011612,
+				"Y": 0.10000000149011612,
+				"Z": 0.10000000149011612
+			}
+		},
+		"Layer": 4
+	},
+	{
+		"ID": "5875d70744f8caf9e89fcd96f85dc5c6",
+		"TypeName": "FlaxEngine.RigidBody",
+		"ParentID": "5bb159234e726e0336fd4d980e4cedfc",
+		"Name": "RigidBody",
+		"Layer": 4,
+		"LinearDamping": 0.0,
+		"AngularDamping": 0.0,
+		"EnableGravity": false
+	},
+	{
+		"ID": "23bc86544674d05a32cd5397c2d3fe60",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "5875d70744f8caf9e89fcd96f85dc5c6",
+		"Name": "StaticModel",
+		"Layer": 4,
+		"Model": "e573d5ca49210c5230e55ea7405519c8",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "b9f6a9ea4ffad93caad51b86dba65da8",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	},
+	{
+		"ID": "0635e679452e5d9fd1535f9d6bb24a49",
+		"TypeName": "FlaxEngine.SphereCollider",
+		"ParentID": "5875d70744f8caf9e89fcd96f85dc5c6",
+		"Name": "SphereCollider",
+		"Layer": 4
+	}
+]
+}

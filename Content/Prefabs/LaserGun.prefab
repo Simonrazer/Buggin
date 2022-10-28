@@ -1,0 +1,115 @@
+{
+	"ID": "3fa4a0d949df8957fc3789a42bf7854d",
+	"TypeName": "FlaxEngine.Prefab",
+	"EngineBuild": 6334,
+	"Data": [
+	{
+		"ID": "225a439547947a62d2505d817ce9ab92",
+		"TypeName": "FlaxEngine.EmptyActor",
+		"Name": "Root"
+	},
+	{
+		"ID": "96aecf50491d46855da704be8865b5a9",
+		"TypeName": "Game.LaserGun",
+		"ParentID": "225a439547947a62d2505d817ce9ab92",
+		"V": {
+	"spawnPoint": "74003fcd4e471cbf6f63f28eea8f2842",
+	"shaft": "9d7a171040bd0cab60cedd9c28de458e",
+	"bullet": "265e107547ce733321b880a1b478dc74"
+}
+	},
+	{
+		"ID": "9d7a171040bd0cab60cedd9c28de458e",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "225a439547947a62d2505d817ce9ab92",
+		"Name": "Base",
+		"Model": "223aa9894e90973780ab508621517526",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "00000000000000000000000000000000",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	},
+	{
+		"ID": "f3afe3e6491bde019e876aa021acf9ed",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "9d7a171040bd0cab60cedd9c28de458e",
+		"Name": "Shaft",
+		"Transform": {
+			"Translation": {
+				"X": 65.24263000488281,
+				"Y": 58.36701202392578,
+				"Z": 0.0
+			},
+			"Scale": {
+				"X": 0.30000001192092898,
+				"Y": 1.3531675338745118,
+				"Z": 0.30000001192092898
+			}
+		},
+		"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "00000000000000000000000000000000",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	},
+	{
+		"ID": "021bbb7747e09b6d6d943a9b79437455",
+		"TypeName": "FlaxEngine.StaticModel",
+		"ParentID": "f3afe3e6491bde019e876aa021acf9ed",
+		"Name": "ShootStick",
+		"Transform": {
+			"Translation": {
+				"X": -197.60171508789063,
+				"Y": 33.7181510925293,
+				"Z": 10.324450492858887
+			},
+			"Scale": {
+				"X": 3.034104347229004,
+				"Y": 0.30189526081085207,
+				"Z": 3.1623997688293459
+			}
+		},
+		"Model": "b43f0f8f4aaba3f3156896a5a22ba493",
+		"Buffer": {
+			"Entries": [
+				{
+					"Material": "00000000000000000000000000000000",
+					"ShadowsMode": 3,
+					"Visible": true,
+					"ReceiveDecals": true
+				}
+			]
+		}
+	},
+	{
+		"ID": "74003fcd4e471cbf6f63f28eea8f2842",
+		"TypeName": "FlaxEngine.EmptyActor",
+		"ParentID": "021bbb7747e09b6d6d943a9b79437455",
+		"Name": "SpawnPoint",
+		"Transform": {
+			"Translation": {
+				"X": -0.4187030792236328,
+				"Y": 0.5944458246231079,
+				"Z": 50.180667877197269
+			},
+			"Scale": {
+				"X": 1.0,
+				"Y": 0.2588326632976532,
+				"Z": 2.7451162338256838
+			}
+		}
+	}
+]
+}
